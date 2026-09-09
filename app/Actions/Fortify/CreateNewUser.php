@@ -4,13 +4,15 @@ namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
+use App\Concerns\HostValidationRules;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Illuminate\Support\Facades\DB;
 
 class CreateNewUser implements CreatesNewUsers
 {
-    use PasswordValidationRules, ProfileValidationRules;
+    use PasswordValidationRules, ProfileValidationRules, HostValidationRules;
 
     /**
      * Validate and create a newly registered user.
@@ -21,13 +23,29 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             ...$this->profileRules(),
+            ...$this->hostRules(),
             'password' => $this->passwordRules(),
         ])->validate();
 
-        return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => $input['password'],
-        ]);
+        return DB::transaction(function () use ($input) {
+
+            $user = User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => $input['password'],
+            ]);
+
+            if(filter_var($input['as_host'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
+
+                $user->host()->create([
+                    'company_name' => $input['company_name'],
+                    'description' => $input['description'] ?? null,
+                ]);
+
+            }
+
+            return $user;
+
+        });
     }
 }
