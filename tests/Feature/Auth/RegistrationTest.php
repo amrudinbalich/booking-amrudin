@@ -126,7 +126,7 @@ test('registration fails entirely when host creation throws inside the transacti
     // Force Host::create to fail after User::create has already run,
     // proving the transaction rolls back the user too.
     Host::creating(function () {
-        throw new \RuntimeException('Simulated host insert failure');
+        throw new RuntimeException('Simulated host insert failure');
     });
 
     $this->post(route('register.store'), [

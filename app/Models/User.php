@@ -53,5 +53,4 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->hasOne(Host::class);
     }
-
 }

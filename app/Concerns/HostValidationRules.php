@@ -12,9 +12,9 @@ trait HostValidationRules
     protected function hostRules(): array
     {
         return [
-            'as_host'      => ['required', 'boolean'],
+            'as_host' => ['required', 'boolean'],
             'company_name' => ['required_if:as_host,true', 'nullable', 'string', 'max:255'],
-            'description'  => ['nullable', 'string', 'max:1000'],
+            'description' => ['nullable', 'string', 'max:1000'],
         ];
     }
 }
