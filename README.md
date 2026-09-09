@@ -14,7 +14,9 @@ from other side - all branches (code extensions) that are made as app functional
 
 Application table schema is roughly designed in following manner:
 
-users
+1. prodji kroz tabele
+
+users - OK
 -id
 -name
 -email
