@@ -49,6 +49,9 @@ class User extends Authenticatable implements PasskeyUser
         ];
     }
 
+    /**
+     * @return HasOne<Host, $this>
+     */
     public function host(): HasOne
     {
         return $this->hasOne(Host::class);
