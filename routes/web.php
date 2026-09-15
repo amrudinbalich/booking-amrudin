@@ -9,3 +9,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/settings.php';
+// require __DIR__.'/admin.php';
+require __DIR__.'/listings.php';
+
+
+// Route::get('/admin/listings', function () {
+//     return response()->json([
+//         'page' => 'Listings admin page',
+//         'category' => 'admin'
+//     ]);
+// });
