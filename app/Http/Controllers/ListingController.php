@@ -9,6 +9,15 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
+/**
+ * TODO:
+ * 
+ * 1. Make as Admin property ( part of Admin Page & Routing )
+ * 2. Add authorization constraints (ownership checks)
+ * 3. Check Tests
+ * 4. Finalize Admin UIS
+ */
+
 class ListingController extends Controller
 {
     /**
@@ -71,6 +80,23 @@ class ListingController extends Controller
      */
     public function edit(Listing $listing)
     {
+
+        /**
+         * listings:
+         * - id -> 4445323
+         * 
+         * user a
+         * user b 
+         * 
+         * req -> 
+         * auth guard (pass) = access ->
+         * user a = user b BOTH passed
+         * 
+         * 
+         * what you need:
+         * add another AUTHORIZATION contraint which checks do user OWNS a resource he tries to acess...
+         */
+
         return Inertia::render('listing/update', [
             'listing' => $listing
         ]);
