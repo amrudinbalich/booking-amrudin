@@ -37,7 +37,7 @@ export default function Show({ listing }: { listing: Listing }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={listing.title} />
 
-            <div className="mx-auto flex max-w-2xl flex-col gap-6 p-4">
+            <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-4">
                 <div className="flex items-start justify-between">
                     <div>
                         <div className="flex items-center gap-2">

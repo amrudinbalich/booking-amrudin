@@ -1,9 +1,10 @@
-import { FormEventHandler, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import { type Listing, type ListingForm } from '@/types/listing';
 import listings from '@/routes/listings';
-
+import { slugify } from '@/lib/slugify';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,37 +22,11 @@ import InputError from '@/components/input-error';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Listings', href: listings.index.url() },
-    { title: 'Create', href: listings.create.url() },
+    { title: 'Create', href: listings.create.url() }
 ];
 
-function slugify(value: string): string {
-    return value
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-}
-
-type ListingForm = {
-    title: string;
-    slug: string;
-    description: string;
-    price_per_night: string;
-    address_line_1: string;
-    city: string;
-    state_province: string;
-    postal_code: string;
-    country_code: string;
-    latitude: string;
-    longitude: string;
-    bedrooms: string;
-    bathrooms: string;
-    max_guests: string;
-    status: 'draft' | 'published';
-};
-
 export default function Create() {
-    const [slugIsManual, setSlugIsManual] = useState(false);
+    const [slugIsManual, setSlugIsManual] = useState<boolean>(false);
 
     const { data, setData, post, processing, errors } = useForm<ListingForm>({
         title: '',
@@ -63,15 +38,15 @@ export default function Create() {
         state_province: '',
         postal_code: '',
         country_code: '',
-        latitude: '',
-        longitude: '',
-        bedrooms: '',
-        bathrooms: '',
-        max_guests: '',
+        latitude: '0',
+        longitude: '0',
+        bedrooms: '1',
+        bathrooms: '1',
+        max_guests: '1',
         status: 'draft',
     });
 
-    const handleTitleChange = (value: string) => {
+    const handleTitleChange = (value: string): void => {
         setData((prev) => ({
             ...prev,
             title: value,
@@ -79,7 +54,7 @@ export default function Create() {
         }));
     };
 
-    const submit: FormEventHandler = (e) => {
+    const submit = (e: SubmitEvent<HTMLFormElement>): void => {
         e.preventDefault();
         post(listings.store.url());
     };
@@ -256,6 +231,7 @@ export default function Create() {
                                 id="bedrooms"
                                 type="number"
                                 min={0}
+                                defaultValue={1}
                                 value={data.bedrooms}
                                 onChange={(e) => setData('bedrooms', e.target.value)}
                             />
@@ -267,6 +243,7 @@ export default function Create() {
                                 id="bathrooms"
                                 type="number"
                                 min={0}
+                                defaultValue={1}
                                 step="0.5"
                                 value={data.bathrooms}
                                 onChange={(e) => setData('bathrooms', e.target.value)}
@@ -279,6 +256,7 @@ export default function Create() {
                                 id="max_guests"
                                 type="number"
                                 min={1}
+                                defaultValue={1}
                                 value={data.max_guests}
                                 onChange={(e) => setData('max_guests', e.target.value)}
                             />

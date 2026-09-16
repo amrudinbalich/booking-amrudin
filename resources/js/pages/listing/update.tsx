@@ -1,9 +1,11 @@
-import { FormEventHandler, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import { type Listing, type ListingForm } from '@/types/listing';
 import listings from '@/routes/listings';
+import { slugify } from '@/lib/slugify';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,55 +21,16 @@ import {
 } from '@/components/ui/select';
 import InputError from '@/components/input-error';
 
-function slugify(value: string): string {
-    return value
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-}
-
-type Listing = {
-    id: number;
-    title: string;
-    slug: string;
-    description: string | null;
-    price_per_night: number;
-    address_line_1: string;
-    city: string;
-    state_province: string | null;
-    postal_code: string | null;
-    country_code: string;
-    latitude: number | null;
-    longitude: number | null;
-    bedrooms: number;
-    bathrooms: number;
-    max_guests: number;
-    status: 'draft' | 'published';
-};
-
-type ListingForm = {
-    title: string;
-    slug: string;
-    description: string;
-    price_per_night: string;
-    address_line_1: string;
-    city: string;
-    state_province: string;
-    postal_code: string;
-    country_code: string;
-    latitude: string;
-    longitude: string;
-    bedrooms: string;
-    bathrooms: string;
-    max_guests: string;
-    status: 'draft' | 'published';
-};
-
 export default function Update({ listing }: { listing: Listing }) {
     // Existing listings already have a deliberate slug — don't silently
     // overwrite it while the user edits the title. Manual by default.
     const [slugIsManual, setSlugIsManual] = useState(true);
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Listings', href: listings.index.url() },
+        { title: listing.title, href: listings.show.url(listing.id) },
+        { title: 'Edit', href: listings.edit.url(listing.id) },
+    ];
 
     const { data, setData, put, processing, errors } = useForm<ListingForm>({
         title: listing.title,
@@ -79,19 +42,13 @@ export default function Update({ listing }: { listing: Listing }) {
         state_province: listing.state_province ?? '',
         postal_code: listing.postal_code ?? '',
         country_code: listing.country_code,
-        latitude: listing.latitude !== null ? String(listing.latitude) : '',
-        longitude: listing.longitude !== null ? String(listing.longitude) : '',
+        latitude: listing.latitude !== null ? String(listing.latitude) : '0',
+        longitude: listing.longitude !== null ? String(listing.longitude) : '0',
         bedrooms: String(listing.bedrooms),
         bathrooms: String(listing.bathrooms),
         max_guests: String(listing.max_guests),
         status: listing.status,
     });
-
-    const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Listings', href: listings.index.url() },
-        { title: listing.title, href: listings.show.url(listing.id) },
-        { title: 'Edit', href: listings.edit.url(listing.id) },
-    ];
 
     const handleTitleChange = (value: string) => {
         setData((prev) => ({
@@ -101,7 +58,7 @@ export default function Update({ listing }: { listing: Listing }) {
         }));
     };
 
-    const submit: FormEventHandler = (e) => {
+    const submit = (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         put(listings.update.url(listing.id));
     };
