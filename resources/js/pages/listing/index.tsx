@@ -1,7 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { type Listing } from '@/types/listing';
 import listings from '@/routes/listings';
 
 import { Badge } from '@/components/ui/badge';
@@ -15,23 +14,6 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-type Listing = {
-    id: number;
-    title: string;
-    slug: string;
-    city: string;
-    country_code: string;
-    price_per_night: number;
-    bedrooms: number;
-    bathrooms: number;
-    max_guests: number;
-    status: 'draft' | 'published';
-};
-
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Listings', href: listings.index.url() },
-];
-
 export default function Index({ listings: userListings }: { listings: Listing[] }) {
     const handleDelete = (listing: Listing) => {
         if (!confirm(`Delete "${listing.title}"? This can't be undone.`)) {
@@ -42,10 +24,12 @@ export default function Index({ listings: userListings }: { listings: Listing[] 
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <>
             <Head title="Listings" />
 
-            <div className="flex flex-col gap-6 p-4">
+            <div className="flex flex-col gap-6 p-6">
+
+                {/* Heading */}
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-xl font-semibold">Listings</h1>
@@ -125,6 +109,6 @@ export default function Index({ listings: userListings }: { listings: Listing[] 
                     </div>
                 )}
             </div>
-        </AppLayout>
+        </>
     );
 }

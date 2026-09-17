@@ -1,13 +1,11 @@
 import { SubmitEvent, useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
 import { type Listing, type ListingForm } from '@/types/listing';
-import listings from '@/routes/listings';
+import listings, { update } from '@/routes/listings';
 import { slugify } from '@/lib/slugify';
 
-import { Button } from '@/components/ui/button';
+import { BackButton } from '@/components/app/back-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,17 +18,12 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import InputError from '@/components/input-error';
+import { SaveButton } from '@/components/app/save-button';
 
 export default function Update({ listing }: { listing: Listing }) {
     // Existing listings already have a deliberate slug — don't silently
     // overwrite it while the user edits the title. Manual by default.
     const [slugIsManual, setSlugIsManual] = useState(true);
-
-    const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Listings', href: listings.index.url() },
-        { title: listing.title, href: listings.show.url(listing.id) },
-        { title: 'Edit', href: listings.edit.url(listing.id) },
-    ];
 
     const { data, setData, put, processing, errors } = useForm<ListingForm>({
         title: listing.title,
@@ -64,15 +57,20 @@ export default function Update({ listing }: { listing: Listing }) {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <>
             <Head title={`Edit ${listing.title}`} />
 
             <form onSubmit={submit} className="mx-auto flex max-w-2xl flex-col gap-6 p-4">
-                <div>
-                    <h1 className="text-xl font-semibold">Edit listing</h1>
-                    <p className="text-sm text-muted-foreground">
-                        Update the details below.
-                    </p>
+                {/* Heading */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-xl font-semibold">Edit listing</h1>
+                        <p className="text-sm text-muted-foreground">
+                            Update the details below.
+                        </p>
+                    </div>
+
+                    <BackButton href={listings.index.url()} />
                 </div>
 
                 {/* Basic info */}
@@ -293,12 +291,8 @@ export default function Update({ listing }: { listing: Listing }) {
                     </CardContent>
                 </Card>
 
-                <div className="flex justify-end gap-2">
-                    <Button type="submit" disabled={processing}>
-                        {processing ? 'Saving…' : 'Save'}
-                    </Button>
-                </div>
+                <SaveButton processing={processing} />
             </form>
-        </AppLayout>
+        </>
     );
 }

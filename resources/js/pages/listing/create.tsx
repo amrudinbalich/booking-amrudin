@@ -1,12 +1,10 @@
-import { SubmitEvent, useState } from 'react';
+import { SubmitEvent, useState, ReactNode } from 'react';
 import { Head, useForm } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { type Listing, type ListingForm } from '@/types/listing';
+import { type ListingForm } from '@/types/listing';
 import listings from '@/routes/listings';
 import { slugify } from '@/lib/slugify';
 
-import { Button } from '@/components/ui/button';
+import { SaveButton } from '@/components/app/save-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,11 +17,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import InputError from '@/components/input-error';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Listings', href: listings.index.url() },
-    { title: 'Create', href: listings.create.url() }
-];
+import { BackButton } from '@/components/app/back-button';
 
 export default function Create() {
     const [slugIsManual, setSlugIsManual] = useState<boolean>(false);
@@ -60,15 +54,20 @@ export default function Create() {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <>
             <Head title="Create listing" />
 
             <form onSubmit={submit} className="mx-auto flex max-w-2xl flex-col gap-6 p-4">
-                <div>
-                    <h1 className="text-xl font-semibold">Create listing</h1>
-                    <p className="text-sm text-muted-foreground">
-                        Fill in the details below. You can save as a draft and finish later.
-                    </p>
+                {/* Heading */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-xl font-semibold">Edit listing</h1>
+                        <p className="text-sm text-muted-foreground">
+                            Update the details below.
+                        </p>
+                    </div>
+
+                    <BackButton href={listings.index.url()} />
                 </div>
 
                 {/* Basic info */}
@@ -303,12 +302,8 @@ export default function Create() {
                     </CardContent>
                 </Card>
 
-                <div className="flex justify-end gap-2">
-                    <Button type="submit" disabled={processing}>
-                        {processing ? 'Saving…' : 'Save'}
-                    </Button>
-                </div>
+                <SaveButton processing={processing} />
             </form>
-        </AppLayout>
+        </>
     );
 }
