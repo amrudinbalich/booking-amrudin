@@ -1,0 +1,309 @@
+import { SubmitEvent, useState, ReactNode } from 'react';
+import { Head, useForm } from '@inertiajs/react';
+import { type ListingForm } from '@/types/listing';
+import listings from '@/routes/listings';
+import { slugify } from '@/lib/slugify';
+
+import { SaveButton } from '@/components/app/save-button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import InputError from '@/components/input-error';
+// import { BackButton } from '@/components/app/back-button';
+
+export default function Create() {
+    const [slugIsManual, setSlugIsManual] = useState<boolean>(false);
+
+    const { data, setData, post, processing, errors } = useForm<ListingForm>({
+        title: '',
+        slug: '',
+        description: '',
+        price_per_night: '',
+        address_line_1: '',
+        city: '',
+        state_province: '',
+        postal_code: '',
+        country_code: '',
+        latitude: '0',
+        longitude: '0',
+        bedrooms: '1',
+        bathrooms: '1',
+        max_guests: '1',
+        status: 'draft',
+    });
+
+    const handleTitleChange = (value: string): void => {
+        setData((prev) => ({
+            ...prev,
+            title: value,
+            slug: slugIsManual ? prev.slug : slugify(value),
+        }));
+    };
+
+    const submit = (e: SubmitEvent<HTMLFormElement>): void => {
+        e.preventDefault();
+        post(listings.store.url());
+    };
+
+    return (
+        <>
+            <Head title="Create listing" />
+
+            <form onSubmit={submit} className="mx-auto flex max-w-2xl flex-col gap-6 p-4">
+                {/* Heading */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-xl font-semibold">Edit listing</h1>
+                        <p className="text-sm text-muted-foreground">
+                            Update the details below.
+                        </p>
+                    </div>
+
+                    {/* <BackButton href={listings.index.url()} /> */}
+                </div>
+
+                {/* Basic info */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Basic info</CardTitle>
+                        <CardDescription>What guests will see first.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="title">Title</Label>
+                            <Input
+                                id="title"
+                                value={data.title}
+                                onChange={(e) => handleTitleChange(e.target.value)}
+                                placeholder="Cozy Downtown Apartment"
+                            />
+                            <InputError message={errors.title} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="slug">Slug</Label>
+                                <button
+                                    type="button"
+                                    onClick={() => setSlugIsManual((prev) => !prev)}
+                                    className="text-xs text-muted-foreground underline underline-offset-2"
+                                >
+                                    {slugIsManual ? 'Auto-generate from title' : 'Edit manually'}
+                                </button>
+                            </div>
+                            <Input
+                                id="slug"
+                                value={data.slug}
+                                disabled={!slugIsManual}
+                                onChange={(e) => setData('slug', slugify(e.target.value))}
+                                placeholder="cozy-downtown-apartment"
+                            />
+                            <InputError message={errors.slug} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="description">Description</Label>
+                            <Textarea
+                                id="description"
+                                value={data.description}
+                                onChange={(e) => setData('description', e.target.value)}
+                                rows={4}
+                                placeholder="A fantastic place in the city center."
+                            />
+                            <InputError message={errors.description} />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Location */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Location</CardTitle>
+                        <CardDescription>Where the listing is located.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="address_line_1">Address</Label>
+                            <Input
+                                id="address_line_1"
+                                value={data.address_line_1}
+                                onChange={(e) => setData('address_line_1', e.target.value)}
+                                placeholder="123 Main St"
+                            />
+                            <InputError message={errors.address_line_1} />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="city">City</Label>
+                                <Input
+                                    id="city"
+                                    value={data.city}
+                                    onChange={(e) => setData('city', e.target.value)}
+                                    placeholder="Sarajevo"
+                                />
+                                <InputError message={errors.city} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="state_province">State / Province</Label>
+                                <Input
+                                    id="state_province"
+                                    value={data.state_province}
+                                    onChange={(e) => setData('state_province', e.target.value)}
+                                    placeholder="FBiH"
+                                />
+                                <InputError message={errors.state_province} />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="postal_code">Postal code</Label>
+                                <Input
+                                    id="postal_code"
+                                    value={data.postal_code}
+                                    onChange={(e) => setData('postal_code', e.target.value)}
+                                    placeholder="71000"
+                                />
+                                <InputError message={errors.postal_code} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="country_code">Country code</Label>
+                                <Input
+                                    id="country_code"
+                                    value={data.country_code}
+                                    onChange={(e) => setData('country_code', e.target.value.toUpperCase())}
+                                    placeholder="BA"
+                                    maxLength={2}
+                                />
+                                <InputError message={errors.country_code} />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="latitude">Latitude</Label>
+                                <Input
+                                    id="latitude"
+                                    type="number"
+                                    step="any"
+                                    value={data.latitude}
+                                    onChange={(e) => setData('latitude', e.target.value)}
+                                    placeholder="43.8563"
+                                />
+                                <InputError message={errors.latitude} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="longitude">Longitude</Label>
+                                <Input
+                                    id="longitude"
+                                    type="number"
+                                    step="any"
+                                    value={data.longitude}
+                                    onChange={(e) => setData('longitude', e.target.value)}
+                                    placeholder="18.4131"
+                                />
+                                <InputError message={errors.longitude} />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Details */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Details</CardTitle>
+                        <CardDescription>Capacity of the listing.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-3 gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="bedrooms">Bedrooms</Label>
+                            <Input
+                                id="bedrooms"
+                                type="number"
+                                min={0}
+                                defaultValue={1}
+                                value={data.bedrooms}
+                                onChange={(e) => setData('bedrooms', e.target.value)}
+                            />
+                            <InputError message={errors.bedrooms} />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="bathrooms">Bathrooms</Label>
+                            <Input
+                                id="bathrooms"
+                                type="number"
+                                min={0}
+                                defaultValue={1}
+                                step="0.5"
+                                value={data.bathrooms}
+                                onChange={(e) => setData('bathrooms', e.target.value)}
+                            />
+                            <InputError message={errors.bathrooms} />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="max_guests">Max guests</Label>
+                            <Input
+                                id="max_guests"
+                                type="number"
+                                min={1}
+                                defaultValue={1}
+                                value={data.max_guests}
+                                onChange={(e) => setData('max_guests', e.target.value)}
+                            />
+                            <InputError message={errors.max_guests} />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Pricing & status */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Pricing & status</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex flex-col gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="price_per_night">Price per night (cents)</Label>
+                            <Input
+                                id="price_per_night"
+                                type="number"
+                                min={0}
+                                value={data.price_per_night}
+                                onChange={(e) => setData('price_per_night', e.target.value)}
+                                placeholder="10000"
+                            />
+                            <InputError message={errors.price_per_night} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="status">Status</Label>
+                            <Select
+                                value={data.status}
+                                onValueChange={(value: ListingForm['status']) => setData('status', value)}
+                            >
+                                <SelectTrigger id="status">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="draft">Draft</SelectItem>
+                                    <SelectItem value="published">Published</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <InputError message={errors.status} />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <SaveButton processing={processing} />
+            </form>
+        </>
+    );
+}
