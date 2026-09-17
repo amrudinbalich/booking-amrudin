@@ -49,8 +49,10 @@ class ListingController extends Controller
             $request->validated()
         );
 
-        return redirect()->route('listings.show', ['listing' => $listing])
-                ->with('success', 'Listing created successfully!');
+        return redirect()->route('listings.index');
+
+        // return redirect()->route('listings.index', ['listing' => $listing])
+        //         ->with('success', 'Listing created successfully!');
     }
 
     /**

@@ -17,7 +17,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import InputError from '@/components/input-error';
-import { BackButton } from '@/components/app/back-button';
+// import { BackButton } from '@/components/app/back-button';
 
 export default function Create() {
     const [slugIsManual, setSlugIsManual] = useState<boolean>(false);
@@ -67,7 +67,7 @@ export default function Create() {
                         </p>
                     </div>
 
-                    <BackButton href={listings.index.url()} />
+                    {/* <BackButton href={listings.index.url()} /> */}
                 </div>
 
                 {/* Basic info */}
