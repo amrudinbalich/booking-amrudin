@@ -1,43 +1,20 @@
 import { Head, Link } from '@inertiajs/react';
 
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import listings from '@/routes/listings'; // TODO: confirm this path matches your generated Wayfinder file
+import { type Listing } from '@/types/listing';
+import listings from '@/routes/listings';
+import { BackButton } from '@/components/app/back-button';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-type Listing = {
-    id: number;
-    title: string;
-    slug: string;
-    description: string | null;
-    price_per_night: number;
-    address_line_1: string;
-    city: string;
-    state_province: string | null;
-    postal_code: string | null;
-    country_code: string;
-    latitude: number | null;
-    longitude: number | null;
-    bedrooms: number;
-    bathrooms: number;
-    max_guests: number;
-    status: 'draft' | 'published';
-};
-
 export default function Show({ listing }: { listing: Listing }) {
-    const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Listings', href: listings.index.url() },
-        { title: listing.title, href: listings.show.url(listing.id) },
-    ];
-
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <>
             <Head title={listing.title} />
 
-            <div className="mx-auto flex max-w-2xl flex-col gap-6 p-4">
+            <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-4">
+                {/* Heading */}
                 <div className="flex items-start justify-between">
                     <div>
                         <div className="flex items-center gap-2">
@@ -48,11 +25,17 @@ export default function Show({ listing }: { listing: Listing }) {
                         </div>
                         <p className="text-sm text-muted-foreground">/{listing.slug}</p>
                     </div>
-                    <Button asChild variant="outline">
-                        <Link href={listings.edit.url(listing.id)}>Edit</Link>
-                    </Button>
+
+                    {/* Right-aligned button group */}
+                    <div className="flex items-center gap-2">
+                        <Button asChild variant="outline">
+                            <Link href={listings.edit.url(listing.id)}>Edit</Link>
+                        </Button>
+                        <BackButton href={listings.index.url()} />
+                    </div>
                 </div>
 
+                {/* Description */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Description</CardTitle>
@@ -64,6 +47,7 @@ export default function Show({ listing }: { listing: Listing }) {
                     </CardContent>
                 </Card>
 
+                {/* Location */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Location</CardTitle>
@@ -84,6 +68,7 @@ export default function Show({ listing }: { listing: Listing }) {
                     </CardContent>
                 </Card>
 
+                {/* Details */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Details</CardTitle>
@@ -104,6 +89,7 @@ export default function Show({ listing }: { listing: Listing }) {
                     </CardContent>
                 </Card>
 
+                {/* Pricing */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Pricing</CardTitle>
@@ -116,6 +102,6 @@ export default function Show({ listing }: { listing: Listing }) {
                     </CardContent>
                 </Card>
             </div>
-        </AppLayout>
+        </>
     );
 }

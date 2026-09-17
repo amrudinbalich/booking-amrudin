@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-// positive cases
+// positive
 test('authenticated user can successfully create a listing and is redirected', function () {
     $user = User::factory()->create();
 
@@ -47,7 +47,7 @@ test('authenticated user can successfully create a listing and is redirected', f
     ]);
 });
 
-// negative cases
+// negative
 test('unauthenticated guest is redirected to login', function () {
     $payload = [
         'title' => 'Unauthenticated Listing',
