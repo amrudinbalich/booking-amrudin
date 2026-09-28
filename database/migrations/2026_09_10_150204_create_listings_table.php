@@ -15,28 +15,18 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
-            // Basic details
             $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('description');
-            $table->unsignedInteger('price_per_night');
+            $table->text('description')->nullable();
 
-            // Location information
-            $table->string('address_line_1');
-            $table->string('city')->index();
-            $table->string('state_province')->nullable();
-            $table->string('postal_code')->nullable();
-            $table->char('country_code', 2)->index();
-            $table->decimal('latitude', 10, 8)->nullable()->index();
-            $table->decimal('longitude', 11, 8)->nullable()->index();
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
 
-            // Property specifications
-            $table->unsignedSmallInteger('bedrooms')->default(1);
-            $table->decimal('bathrooms', 3, 1)->default(1.0);
-            $table->unsignedSmallInteger('max_guests')->default(1);
+            $table->decimal('price_per_night', 8, 2);
 
-            // State
-            $table->string('status', 20)->default('draft');
+            $table->boolean('avaliable')->default(true);
+            $table->boolean('draft')->default(false);
+
+            // $table->softDeletes(); -- potential feature
             $table->timestamps();
         });
     }

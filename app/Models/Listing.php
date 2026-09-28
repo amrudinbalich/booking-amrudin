@@ -6,24 +6,16 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 
 #[Fillable([
-    'user_id',
     'title',
-    'slug',
     'description',
     'price_per_night',
-    'address_line_1',
-    'city',
-    'state_province',
-    'postal_code',
-    'country_code',
     'latitude',
     'longitude',
-    'bedrooms',
-    'bathrooms',
-    'max_guests',
-    'status',
+    'available',
+    'draft',
 ])]
 class Listing extends Model
 {
@@ -37,12 +29,11 @@ class Listing extends Model
     protected function casts(): array
     {
         return [
-            'price_per_night' => 'integer',
-            'latitude' => 'float',
-            'longitude' => 'float',
-            'bedrooms' => 'integer',
-            'bathrooms' => 'float',
-            'max_guests' => 'integer',
+            'price_per_night' => 'decimal:2',
+            'available' => 'boolean',
+            'draft' => 'boolean',
+            'latitude' => 'decimal:7',
+            'longitude' => 'decimal:7'
         ];
     }
 
@@ -51,8 +42,18 @@ class Listing extends Model
      *
      * @return BelongsTo<User, $this>
      */
-    public function user(): BelongsTo
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->where('draft', false);
+    }
+
+    public function scopeAvailable(Builder $query): Builder
+    {
+        return $query->where('available', true);
     }
 }
