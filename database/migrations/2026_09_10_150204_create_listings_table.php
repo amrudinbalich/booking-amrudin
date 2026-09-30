@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->decimal('price_per_night', 8, 2);
 
-            $table->boolean('avaliable')->default(true);
+            $table->boolean('available')->default(true);
             $table->boolean('draft')->default(false);
 
             // $table->softDeletes(); -- potential feature
