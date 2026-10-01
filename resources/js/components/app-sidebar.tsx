@@ -26,11 +26,13 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Listings',
         icon: Building2,
-        href: listings.index.url(),
+        // href: listings.index.url(),
+        href: '/',
         items: [
             {
                 title: 'All',
-                href: listings.index.url(),
+                // href: listings.index.url(),
+                href: '/admin/listings',
             },
             {
                 title: 'Create',
