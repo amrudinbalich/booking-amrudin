@@ -1,11 +1,15 @@
-import { PropsWithChildren } from "react";
+import PublicSimpleLayout from "./public/public-simple-layout";
 
-export default function PublicLayout({ children }: PropsWithChildren) {
+export default function PublicLayout({ 
+    title, 
+    children
+}: { 
+    title: string,
+    children: React.ReactNode
+}) {
     return (
-        <div 
-            // className="flex min-h-svh flex-col items-center justify-center p-4"
-        >
-            {children}
-        </div>
+        <PublicSimpleLayout title={title}>
+            { children }
+        </PublicSimpleLayout>
     );
 }
