@@ -55,7 +55,7 @@ export default function Create() {
                                 id="title"
                                 value={data.title}
                                 onChange={(e) => setData('title', e.target.value)}
-                                placeholder="Cozy Downtown Apartment"
+                                placeholder="Hotel Villa Palm"
                             />
                             <InputError message={errors.title} />
                         </div>

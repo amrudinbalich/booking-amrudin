@@ -7,7 +7,8 @@ use App\Http\Controllers\Admin\ListingController;
 
 // Route::resource('listings', ListingController::class);
 
-Route::resource('listings', ListingController::class)->only(['index', 'create', 'store']);
+Route::resource('listings', ListingController::class);
+// ->only(['index', 'create', 'store']);
 
 // Route::middleware(['auth'])->prefix('admin')->group(function () {
 

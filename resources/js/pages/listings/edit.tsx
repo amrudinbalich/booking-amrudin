@@ -1,4 +1,4 @@
-import { SubmitEvent } from "react";
+import { SubmitEvent } from 'react';
 import { Head, useForm } from "@inertiajs/react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from '@/components/ui/input';
@@ -8,47 +8,39 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch"
 import listings from "@/routes/listings";
+import { Listing, ListingForm } from "@/types/listing";
 
-interface ListingForm {
-    title: string;
-    description: string;
-    price_per_night: string;
-    latitude: string;
-    longitude: string;
-    available: boolean;
-    draft: boolean;
+interface Props {
+    listing: Listing;
 }
 
-export default function Create() {
+export default function Edit({ listing }: Props) {
 
-    const { data, setData, post, processing, errors } = useForm<ListingForm>({
-        title: '',
-        description: '',
-        price_per_night: '',
-        latitude: '0',
-        longitude: '0',
-        available: true,
-        draft: false,
+    const { data, setData, put, processing, errors } = useForm<ListingForm>({
+        title: listing.title,
+        description: listing.description ?? '',
+        price_per_night: listing.price_per_night,
+        latitude: listing.latitude ?? '0',
+        longitude: listing.longitude ?? '0',
+        available: listing.available,
+        draft: listing.draft,
     });
 
-    const submit = (e: SubmitEvent<HTMLFormElement>): void => {
+    const submit = (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('form submit called.');
-
-        post(listings.store.url());
-
+        put(listings.update.url(listing.id));
     };
 
     return (
         <>
-            <Head title="Create Listing" />
+            <Head title="Edit Listing" />
 
             <form onSubmit={submit} className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-6">
 
                 <div>
-                    <h1 className="text-xl font-semibold">Create listing</h1>
+                    <h1 className="text-xl font-semibold">Edit listing</h1>
                     <p className="text-sm text-muted-foreground">
-                        Fill in the details below.
+                        Update the details below.
                     </p>
                 </div>
 
@@ -67,7 +59,7 @@ export default function Create() {
                                 id="title"
                                 value={data.title}
                                 onChange={(e) => setData('title', e.target.value)}
-                                placeholder="Cozy Downtown Apartment"
+                                placeholder="Hotel Villa Palm"
                             />
                             <InputError message={errors.title} />
                         </div>
@@ -104,6 +96,7 @@ export default function Create() {
                                 type="text" 
                                 placeholder="48.8584" 
                             />
+                            <InputError message={errors.latitude} />
                         </div>
 
                         <div className="grid gap-2">
@@ -115,6 +108,7 @@ export default function Create() {
                                 type="text" 
                                 placeholder="2.2945"
                             />
+                            <InputError message={errors.longitude} />
                         </div>
 
                     </CardContent>
@@ -162,34 +156,15 @@ export default function Create() {
                                 <Label htmlFor="draft">Draft</Label>
                             </div>
                         </div>
+
                         <InputError message={errors.available} />
                         <InputError message={errors.draft} />
-
-                        {/* <div className="flex items-center justify-between rounded-lg border p-3">
-                            <Label htmlFor="available">Available</Label>
-                            <Switch 
-                                id="available"
-                                checked={data.available}
-                                onCheckedChange={(checked) => setData('available', checked)}
-                            />
-                            <InputError message={errors.available} />
-                        </div>
-
-                        <div className="flex items-center justify-between rounded-lg border p-3">
-                            <Label htmlFor="draft">Draft</Label>
-                            <Switch
-                                id="draft"
-                                checked={data.draft}
-                                onCheckedChange={(checked) => setData('draft', checked)}
-                            />
-                            <InputError message={errors.draft} />
-                        </div> */}
 
                     </CardContent>
                 </Card>
 
                 <div className="flex justify-end gap-2">
-                    <Button type="submit" disabled={processing}>Save</Button>
+                    <Button type="submit" disabled={processing}>Save changes</Button>
                 </div>
 
             </form>

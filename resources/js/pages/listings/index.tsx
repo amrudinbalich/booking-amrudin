@@ -1,5 +1,7 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { type Listing, type Paginated } from '@/types/listing';
+import { Button } from '@/components/ui/button';
+import { Pencil, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
     Table,
@@ -9,10 +11,18 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import listingRoutes from '@/routes/listings';
 
 interface Props {
     listings: Paginated<Listing>;
 }
+
+// actions
+const handleDelete = (id: number) => {
+    if (confirm('Are you sure you want to delete this listing?')) {
+        router.delete(listingRoutes.destroy.url(id));
+    }
+};
 
 export default function Index({ listings }: Props) {
     return (
@@ -35,18 +45,21 @@ export default function Index({ listings }: Props) {
                                 <TableHead>Price / night</TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead>Created</TableHead>
+                                <TableHead></TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
+                            {/* no listings */}
                             {listings.data.length === 0 && (
                                 <TableRow>
-                                    <TableCell colSpan={4} className="py-8 text-center text-muted-foreground">
+                                    <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
                                         No listings yet.
                                     </TableCell>
                                 </TableRow>
                             )}
 
-                            {listings.data.map((listing) => (
+                            {/* render */}
+                            {listings.data.map((listing: Listing) => (
                                 <TableRow key={listing.id}>
                                     <TableCell className="font-medium">{listing.title}</TableCell>
                                     <TableCell>${Number(listing.price_per_night).toFixed(2)}</TableCell>
@@ -62,6 +75,27 @@ export default function Index({ listings }: Props) {
                                     </TableCell>
                                     <TableCell className="text-muted-foreground">
                                         {new Date(listing.created_at).toLocaleDateString()}
+                                    </TableCell>
+                                    <TableCell>
+                                        
+                                        <div className="flex justify-end gap-1">
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={listingRoutes.edit.url(listing.id)}>
+                                                    <Pencil className="size-4" />
+                                                    <span className="sr-only">Edit</span>
+                                                </Link>
+                                            </Button>
+
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => handleDelete(listing.id)}
+                                            >
+                                                <Trash2 className="size-4" />
+                                                <span className="sr-only">Delete</span>
+                                            </Button>
+                                        </div>
+                                        
                                     </TableCell>
                                 </TableRow>
                             ))}
