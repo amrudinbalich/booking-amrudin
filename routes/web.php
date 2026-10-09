@@ -1,14 +1,17 @@
 <?php
 
+use App\Http\Controllers\ListingController;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\Admin\ListingController;
 
 Route::inertia('/', 'welcome')->name('home');
+Route::inertia('/welcome', 'public/home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 });
 
+require __DIR__.'/public.php';
 require __DIR__.'/settings.php';
 // require __DIR__.'/admin.php';
 

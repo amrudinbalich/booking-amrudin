@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Public;
 use App\Models\Listing;
 use App\Repositories\ListingsRepositoryInterface;
 use Inertia\Inertia;
 use Inertia\Response as InertiaView;
 
-class ListingController extends Controller
+final class ListingController
 {
     public function __construct(
         public ListingsRepositoryInterface $listingsRepository
@@ -48,5 +46,4 @@ class ListingController extends Controller
     {
         return Inertia::render('public/listings-show');
     }
-
 }
