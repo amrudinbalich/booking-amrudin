@@ -11,12 +11,15 @@ import type { Props as ManagePasskeysProps } from '@/components/manage-passkeys'
 import ManagePasskeys from '@/components/manage-passkeys';
 import type { Props as ManageTwoFactorProps } from '@/components/manage-two-factor';
 import ManageTwoFactor from '@/components/manage-two-factor';
+import { ManageToken } from '@/components/manage-token';
+import type { Props as ApiKeyProps } from '@/components/manage-token';
 
 // oxfmt-ignore
 type Props = {
     passwordRules: string;
 } & ManagePasskeysProps &
-    ManageTwoFactorProps;
+    ManageTwoFactorProps &
+    ApiKeyProps;
 
 export default function Security(props: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
@@ -134,6 +137,9 @@ export default function Security(props: Props) {
                 canManagePasskeys={props.canManagePasskeys}
                 passkeys={props.passkeys}
             />
+
+            <ManageToken apiKey={props.apiKey} />
+
         </>
     );
 }
