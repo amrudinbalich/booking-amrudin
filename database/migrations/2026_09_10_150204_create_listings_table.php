@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('longitude', 10, 7);
 
             $table->decimal('price_per_night', 8, 2);
+            $table->boolean('featured')->default(false); // paid feature - boosts visibility, includes special color on listing
 
             $table->boolean('available')->default(true);
             $table->boolean('draft')->default(false);

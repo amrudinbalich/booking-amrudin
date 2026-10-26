@@ -19,25 +19,22 @@ class ListingFactory extends Factory
      */
     public function definition(): array
     {
-        $title = fake()->sentence(3);
+        // $title = fake()->sentence(3);
 
         return [
             'user_id' => User::factory(),
-            'title' => $title,
-            'slug' => Str::slug($title) . '-' . fake()->unique()->numberBetween(100, 999),
+            
+            'title' => fake()->sentence(3),
             'description' => fake()->paragraphs(3, true),
-            'price_per_night' => fake()->numberBetween(3000, 50000), // In cents/integers ($30.00 to $500.00)
-            'address_line_1' => fake()->streetAddress(),
-            'city' => fake()->city(),
-            'state_province' => fake()->state(),
-            'postal_code' => fake()->postcode(),
-            'country_code' => fake()->countryCode(),
+
             'latitude' => fake()->latitude(),
             'longitude' => fake()->longitude(),
-            'bedrooms' => fake()->numberBetween(1, 5),
-            'bathrooms' => fake()->randomElement([1.0, 1.5, 2.0, 2.5, 3.0]),
-            'max_guests' => fake()->numberBetween(1, 10),
-            'status' => fake()->randomElement(['draft', 'published', 'archived']),
+
+            'price_per_night' => fake()->randomFloat(2, 30, 500),
+
+            'featured' => fake()->boolean(),
+            'available' => fake()->boolean(),
+            'draft' => fake()->boolean(),
         ];
     }
 }

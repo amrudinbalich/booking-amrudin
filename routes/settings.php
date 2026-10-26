@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
+use App\Http\Controllers\Settings\TokenController;
 use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('throttle:6,1')
         ->name('user-password.update');
 
+    Route::post('settings/sanctum/token', [ SecurityController::class, 'token' ])
+        ->name('sanctum.token');
+
     Route::inertia('settings/appearance', 'settings/appearance')->name('appearance.edit');
+});
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+    Route::get('settings/token', [TokenController::class, 'index'])
+        ->middleware(RequirePassword::class)
+        ->name('token.index');
+
+    Route::post('settings/token/generate', [TokenController::class, 'generate'])
+        ->name('token.generate');
+
+    Route::delete('settings/token/generate', [TokenController::class, 'destroy'])
+        ->name('token.destroy');
+    
 });
 
 Route::get('.well-known/passkey-endpoints', function () {

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\PasswordUpdateRequest;
 use App\Http\Requests\Settings\TwoFactorAuthenticationRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -47,6 +49,10 @@ class SecurityController extends Controller
             $props['requiresConfirmation'] = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
         }
 
+        // todo: fetch api key
+        $props['apiKey'] = 'my api key';
+        $props['apiKey'] = '';
+
         return Inertia::render('settings/security', $props);
     }
 
@@ -61,6 +67,29 @@ class SecurityController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Password updated.')]);
 
+        return back();
+    }
+
+    /**
+     * Generate API Token for a user.
+     * @return JsonResponse
+     */
+    public function token(Request $request): RedirectResponse
+    {
+        $form = $request->validate([
+            'token_name' => 'required|string|min:3|max:25',
+            // 'expire_days' => 'required|numeric'
+        ]);
+
+        // $validated = $request->validated();
+
+        $token = $request->user()->createToken(
+            name: $form['token_name'],
+            abilities: ['*'],
+            // expiresAt: now()->addDays($form['expire_days'])
+        );
+
+        Inertia::flash('toast', ['type' => 'success', 'message' =>  __('Token generated.')]);
         return back();
     }
 }
