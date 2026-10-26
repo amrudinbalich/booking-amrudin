@@ -32,7 +32,7 @@ import {
   } from "@/components/ui/select";
 
 export type Props = {
-    apiKey: string;
+    token: string;
 };
 
 type ExpireDays = {
@@ -54,7 +54,7 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog"
 
-export function ManageToken({ apiKey }: Props) {
+export function ManageToken({ token }: Props) {
 
     // const { data, setData, post, processing, errors, reset } = useForm({
     //     tok§en_name: '',

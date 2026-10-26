@@ -138,7 +138,7 @@ export default function Security(props: Props) {
                 passkeys={props.passkeys}
             />
 
-            <ManageToken apiKey={props.apiKey} />
+            {/* <ManageToken token={props.token} /> */}
 
         </>
     );

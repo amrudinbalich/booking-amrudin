@@ -39,6 +39,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('settings/token/generate', [TokenController::class, 'generate'])
         ->name('token.generate');
+
+    Route::delete('settings/token/generate', [TokenController::class, 'destroy'])
+        ->name('token.destroy');
     
 });
 

@@ -59,4 +59,10 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->hasMany(Listing::class);
     }
+
+
+    public function hasToken(): bool
+    {
+        return $this->tokens()->exists();
+    }
 }

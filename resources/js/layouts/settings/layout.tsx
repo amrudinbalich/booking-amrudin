@@ -23,7 +23,7 @@ const sidebarNavItems: NavItem[] = [
         icon: null,
     },
     {
-        title: 'Acess Token',
+        title: 'Access Token',
         href: showToken(),
         icon: null,
     },
