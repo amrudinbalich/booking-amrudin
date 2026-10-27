@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Public\ListingController as PublicListingController;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\Admin\ListingController;
 
@@ -25,6 +26,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
 });
 
+
+Route::get('/explore', [ PublicListingController::class, 'index']);
 
 // Route::get('/admin/listings', function () {
 //     return response()->json([
