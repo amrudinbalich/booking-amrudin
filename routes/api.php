@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ListingsExploreController;
+use App\Http\Controllers\Public\ListingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ExploreListingsController;
@@ -11,6 +12,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // Route::post('/token/generate', );
+
+Route::get('/listings/fetch', [ListingsController::class, 'fetch'])->name('api.listings.fetch');
 
 Route::get('/listings/explore', ExploreListingsController::class);
 
