@@ -9,6 +9,46 @@ use Illuminate\Http\Request;
 
 class ListingsController extends Controller
 {
+
+    public function fetch(Request $request)
+    {
+        // $country = $request->input('country');
+        // $city = $request->input('city');
+        // $address = $request->input('address');
+        // $zip_code = $request->input('zip_code');
+
+        // [
+        //     'title' => $title,
+        //     // 'country' => $country, 
+        //     // 'city' => $city, 
+        //     // 'address' => $address, 
+        //     // 'zip_code' => $zip_code
+        // ] = $request->only([
+        //         'title'
+        //         // 'country', 
+        //         // 'city', 
+        //         // 'address', 
+        //         // 'zip_code'
+        //     ]);
+
+        $name = $request->input('name');
+        $limit = $request->input('limit', 15);
+
+        if (isset($name) && !empty($name)) {
+
+            $listings = Listing::where('title', 'ILIKE', "{$name}")->limit($limit)->get();
+            
+        } else {
+            $listings = Listing::latest()->take($limit)->get();
+        }
+
+        return response()->json([
+            'listings' => $listings
+        ]);
+
+    }
+
+
     /**
      * Display a listing of the resource.
      */
