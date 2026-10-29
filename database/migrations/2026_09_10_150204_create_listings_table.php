@@ -15,8 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
-            $table->string('title');
-            $table->text('description')->nullable();
+            $table->string('name')->unique();
+            // $table->text('description')->nullable();
+
+            // $table->decimal('price_per_night', 8, 2);
+
+            // $table->boolean('available')->default(true);
+            // $table->boolean('public')->default(true);
 
             // $table->string('image')->nullable();
 
@@ -29,11 +34,11 @@ return new class extends Migration
             // $table->decimal('latitude', 10, 7)->nullable();
             // $table->decimal('longitude', 10, 7)->nullable();
 
-            $table->decimal('price_per_night', 8, 2);
-            $table->boolean('featured')->default(false); // paid feature - boosts visibility, includes special color on listing
+            // $table->decimal('price_per_night', 8, 2);
+            // $table->boolean('featured')->default(false); // paid feature - boosts visibility, includes special color on listing
 
-            $table->boolean('available')->default(true);
-            $table->boolean('draft')->default(false);
+            // $table->boolean('available')->default(true);
+            // $table->boolean('public')->default(true);
 
             // $table->softDeletes(); -- potential feature
             $table->timestamps();

@@ -65,4 +65,10 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->tokens()->exists();
     }
+
+    public function isHost(): bool
+    {
+        return (bool) $this->is_host;
+    }
+
 }

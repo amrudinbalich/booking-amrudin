@@ -15,6 +15,10 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/listings/fetch', [ListingsController::class, 'fetch'])->name('api.listings.fetch');
 
+// host-only
+Route::post('/listings', [ListingsController::class, 'store'])
+    ->middleware(['auth:sanctum', 'user.host']);
+
 Route::get('/listings/explore', ExploreListingsController::class);
 
 Route::put('/listings/featured/{listing}', [ListingsController::class, 'setFeatured'])->middleware('auth:sanctum');

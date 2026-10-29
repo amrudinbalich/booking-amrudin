@@ -13,6 +13,7 @@ class StoreListingRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+        // return $this->user()->isHost();
     }
 
     /**
@@ -25,14 +26,14 @@ class StoreListingRequest extends FormRequest
         // $validCountries = implode(',', array_keys(config('countries')));
 
         return [
-            'title'           => ['required', 'string', 'max:255'],
-            'description'     => ['required', 'string', 'max:5000'],
+            'name'           => ['required', 'string', 'min:3', 'max:255', 'unique:listings,name'],
+            // 'description'     => ['optional', 'string', 'max:5000'],
             // 'country_code' => ['required', 'string', "in:{$validCountries}"],
-            'price_per_night' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:999999.99'],
-            'latitude'        => ['required', 'numeric', 'decimal:0,7', 'between:-90,90'],
-            'longitude'       => ['required', 'numeric', 'decimal:0,7', 'between:-180,180'],
-            'available'       => ['required', 'boolean'],
-            'draft'           => ['required', 'boolean'],
+            // 'price_per_night' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:999999.99'],
+            // 'latitude'        => ['required', 'numeric', 'decimal:0,7', 'between:-90,90'],
+            // 'longitude'       => ['required', 'numeric', 'decimal:0,7', 'between:-180,180'],
+            // 'available'       => ['required', 'boolean'],
+            // 'draft'           => ['required', 'boolean'],
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreListingRequest;
 use App\Models\Listing;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -42,9 +43,13 @@ class ListingsController extends Controller
             $listings = Listing::latest()->take($limit)->get();
         }
 
-        return response()->json([
-            'listings' => $listings
-        ]);
+        return response()->json(
+            $listings
+        // [
+        //     $listings,
+        //     // 'listings' => $listings
+        // ]
+        );
 
     }
 
@@ -60,9 +65,13 @@ class ListingsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreListingRequest $request): JsonResponse
     {
-        //
+        $listing = $request->user()->listings()->create(
+            $request->validated()
+        );
+
+        return response()->json($listing, 201);
     }
 
     /**
