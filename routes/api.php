@@ -17,7 +17,7 @@ Route::get('/listings/fetch', [ListingsController::class, 'fetch'])->name('api.l
 
 // host-only
 Route::post('/listings', [ListingsController::class, 'store'])
-    ->middleware(['auth:sanctum', 'user.host']);
+    ->middleware(['auth:sanctum', 'can:host']);
 
 Route::get('/listings/explore', ExploreListingsController::class);
 

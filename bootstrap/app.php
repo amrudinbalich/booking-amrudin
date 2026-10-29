@@ -25,9 +25,9 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        $middleware->alias([
-            'user.host' => UserHost::class,
-        ]);
+        // $middleware->alias([
+        //     'user.host' => UserHost::class,
+        // ]);
 
     })
     ->withExceptions(function (Exceptions $exceptions): void {
